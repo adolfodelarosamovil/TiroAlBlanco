@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -57,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         round_txt = findViewById(R.id.rounds);
         title_popup_txt = findViewById(R.id.title_popup);
         message_popup_txt = findViewById(R.id.message_popup);
+        simpleSeekBar=(SeekBar)findViewById(R.id.seek_bar);
     }
 
     private void asignarNumeroAleatorio() {
         number_random = getNumeroAleatorio();
-        number_random_txt.setText(String.valueOf(number_random));
     }
 
     public void hitme(View view) {
@@ -98,9 +99,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(mensaje);
         builder.setTitle(titulo);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Log.d("MIAPP", "Tocó SÍ");
                 if(round == 5){
                     inicializarJuego();
                 }
@@ -156,13 +156,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepararPunteria(){
-
-        // initiate  views
-        simpleSeekBar=(SeekBar)findViewById(R.id.seek_bar);
-        // perform seek bar change listener event used for getting the progress value
+        //realizar el evento de escucha de cambio de barra de búsqueda utilizado para obtener el valor de progreso
         simpleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
             }
@@ -179,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private int getNumeroAleatorio(){
@@ -189,11 +183,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculatePoints(){
-        Log.d("MIAPP", "progressChangedValue: " + progressChangedValue);
-        Log.d("MIAPP", "number_random : " + number_random);
         round++;
         int diferencia = Math.abs(progressChangedValue-number_random);
-        Log.d("MIAPP", "DIFERENCIA : " + diferencia);
         if(diferencia == 0){
             if(round == 1){
                 points = 1000000;
@@ -208,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
             }
             titulo = "Acertaste en el intento : " + round;
             mensaje = "Tu puntuación total es : " + points;
+            inicializarJuego();
         }else {
             int point = 0;
             if (diferencia > 50) {
@@ -243,4 +235,13 @@ public class MainActivity extends AppCompatActivity {
         //message_popup_txt.setText(mensaje);
     }
 
+    public void ir_about(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    public void mostrarValor(View view) {
+        Toast.makeText(MainActivity.this, "" + number_random,
+                Toast.LENGTH_SHORT).show();
+    }
 }

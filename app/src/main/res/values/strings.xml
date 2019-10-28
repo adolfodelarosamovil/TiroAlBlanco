@@ -8,4 +8,7 @@
     <string name="dialog_title">You almost had it!</string>
     <string name="ok">Aceptar</string>
     <string name="apuntar">Apuntas al número: </string>
+    <string name="close">Cerrar</string>
+    <string name="about_author">Autor</string>
+    <string name="acercade">Acerca del Autor : CFTIC</string>
 </resources>

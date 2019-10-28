@@ -9,4 +9,7 @@
     <string name="dialog_title">You almost had it!</string>
     <string name="ok">OK</string>
     <string name="apuntar">You point to the number:</string>
+    <string name="close">Close</string>
+    <string name="about_author">About Author</string>
+    <string name="acercade">About Author : CFTIC</string>
 </resources>
