@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         number_random_txt = findViewById(R.id.numero_aleatorio);
         points_txt = findViewById(R.id.points);
         round_txt = findViewById(R.id.rounds);
-        title_popup_txt = findViewById(R.id.title_popup);
-        message_popup_txt = findViewById(R.id.message_popup);
+        //title_popup_txt = findViewById(R.id.title_popup);
+        //message_popup_txt = findViewById(R.id.message_popup);
         simpleSeekBar=(SeekBar)findViewById(R.id.seek_bar);
     }
 
