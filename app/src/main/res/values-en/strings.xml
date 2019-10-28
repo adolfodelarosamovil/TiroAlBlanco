@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bull’s Eye</string>
+    <string name="instruccion">Put the Bull’s Eye as close as you can to:</string>
+    <string name="hitme">Hit Me!</string>
+    <string name="round">Round:</string>
+    <string name="score">Score:</string>
+    <string name="dialog_message">You scored 98 points</string>
+    <string name="dialog_title">You almost had it!</string>
+    <string name="ok">OK</string>
+    <string name="apuntar">You point to the number:</string>
+</resources>

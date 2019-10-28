@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TiroAlBlanco</string>
+    <string name="instruccion">"Apunta y Dispara al número que he generado: "</string>
+    <string name="hitme">Dispara!</string>
+    <string name="score">Puntuación:</string>
+    <string name="round">Intento:</string>
+    <string name="dialog_message">You scored 98 points</string>
+    <string name="dialog_title">You almost had it!</string>
+    <string name="ok">Aceptar</string>
+    <string name="apuntar">Apuntas al número: </string>
+</resources>
