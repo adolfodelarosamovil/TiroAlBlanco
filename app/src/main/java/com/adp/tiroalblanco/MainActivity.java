@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void popupAlert(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+/*        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(mensaje);
         builder.setTitle(titulo);
@@ -121,20 +121,25 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.dismiss();
                 MainActivity.this.finish();*/
-            }
+ /*           }
         });
 
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        /*
+      */
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
 
+
+
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.popup_alert, null))
+        View v = inflater.inflate(R.layout.popup_alert, null);
+        TextView tt = v.findViewById(R.id.title_popup);
+        tt.setText(titulo);
+        builder.setView(v)
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -143,8 +148,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         AlertDialog dialog = builder.create();
+
+
+        //TextView tm = dialog.findViewById(R.id.message_popup);
+        //tm.setText(mensaje);
+
+
+        //title_popup_txt.setText(titulo);
+        //message_popup_txt.setText(mensaje);
         dialog.show();
-*/
+
     }
 
     private void inicializarJuego() {
