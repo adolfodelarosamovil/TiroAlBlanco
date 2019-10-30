@@ -27,10 +27,12 @@ public class AboutActivity extends AppCompatActivity {
 
     public void close(View view) {
         finish();
+        overridePendingTransition(R.anim.anim_slide_right_in, R.anim.anim_slide_right_out);
     }
 
     public void irAboutAuthor(View view) {
         Intent intent = new Intent(this, AboutAuthorActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.anim_slide_up_in, R.anim.anim_slide_up_out);
     }
 }

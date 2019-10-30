@@ -17,5 +17,6 @@ public class AboutAuthorActivity extends AppCompatActivity {
 
     public void close(View view) {
         finish();
+        overridePendingTransition(R.anim.anim_slide_up_in, R.anim.anim_slide_up_out);
     }
 }

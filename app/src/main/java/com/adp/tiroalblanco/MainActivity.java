@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
     SeekBar simpleSeekBar;
     TextView points_txt;
     TextView round_txt;
-    TextView title_popup_txt;
-    TextView message_popup_txt;
+    TextView titlePopup;
+    TextView messagePopup;
+    ImageView trofeoPopup;
     Vibrator vibrator;
+
     private final int MIN_VALUE = 1;
     int progressChangedValue = 50;
     int round = 0;
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     int number_random = 0;
     String titulo;
     String mensaje;
+    String botonPopup = "Aceptar";
+    boolean acertaste = false;
 
 
     @Override
@@ -56,15 +62,25 @@ public class MainActivity extends AppCompatActivity {
         number_random_txt = findViewById(R.id.numero_aleatorio);
         points_txt = findViewById(R.id.points);
         round_txt = findViewById(R.id.rounds);
-        //title_popup_txt = findViewById(R.id.title_popup);
-        //message_popup_txt = findViewById(R.id.message_popup);
         simpleSeekBar=(SeekBar)findViewById(R.id.seek_bar);
     }
 
-    private void asignarNumeroAleatorio() {
-        number_random = getNumeroAleatorio();
+    // Inicializar Juego
+    private void inicializarJuego() {
+        round = 0;
+        points = 0;
+        round_txt.setText(String.valueOf(round));
+        points_txt.setText(String.valueOf(points));
+        asignarNumeroAleatorio();
+        acertaste = false;
+        botonPopup = "Aceptar";
     }
 
+    public void inicializar_juego(View view) {
+        inicializarJuego();
+    }
+
+    // Acciones al presionar botón DISPARO!
     public void hitme(View view) {
         vibrate();
         sonidoFlecha();
@@ -72,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         popupAlert();
     }
 
+    // Vibrar el dispositivo
     private void vibrate() {
         long[] pattern = {0, 1000};
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -84,92 +101,64 @@ public class MainActivity extends AppCompatActivity {
         }, 1000);
     }
 
+    // Reproducir archivo de sonido
     private void sonidoFlecha() {
-        //Reproducir archivo de sonido
         MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.impacto_flecha);
         mediaPlayer.setLooping(false);
         mediaPlayer.setVolume(1300, 1300);
         mediaPlayer.start();
     }
 
+    // Reproducir archivo de sonido
+    private void sonidoGanador() {
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.ganador);
+        mediaPlayer.setLooping(false);
+        mediaPlayer.setVolume(1300, 1300);
+        mediaPlayer.start();
+    }
+
+    // Mostrar Popup
     private void popupAlert(){
-
-/*        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(mensaje);
-        builder.setTitle(titulo);
-
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if(round == 5){
-                    inicializarJuego();
-                }
-/*
-                Log.d("MIAPP", "El usuario le ha dado al Botón Retroceso");
-                EditText dniView = findViewById(R.id.dni);
-                String dniString = dniView.getText().toString();
-
-                RadioGroup radioGroup = findViewById(R.id.radioGroup);
-                int radioId = radioGroup.getCheckedRadioButtonId();
-
-                //Guarda valores
-                SharedPreferences sp = getSharedPreferences(NOMBRE_FICHERO_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(DNI, dniString);
-                editor.putInt(RADIO, radioId);
-                editor.commit();
-
-                dialog.dismiss();
-                MainActivity.this.finish();*/
- /*           }
-        });
-
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-      */
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Get the layout inflater
-        LayoutInflater inflater = this.getLayoutInflater()+
+        // Obtén el  layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
 
+        // Inflate y establecer el layout para el diálogo
+        // Pase null como la parent view porque va en el dialog layout
+        View viewRoot = inflater.inflate(R.layout.popup_alert, null);
 
+        //Actualizar textos del Popup
+        titlePopup = viewRoot.findViewById(R.id.title_popup);
+        messagePopup = viewRoot.findViewById(R.id.message_popup);
+        trofeoPopup = viewRoot.findViewById(R.id.trofeo_popup);
+        titlePopup.setText(titulo);
+        messagePopup.setText(mensaje);
+        if(acertaste){
+            trofeoPopup.setVisibility(View.VISIBLE);
+        }else{
+            trofeoPopup.setVisibility(View.GONE);
+        }
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        View v = inflater.inflate(R.layout.popup_alert, null);
-        TextView tt = v.findViewById(R.id.title_popup);
-        tt.setText(titulo);
-        builder.setView(v)
-                // Add action buttons
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
+        builder.setView(viewRoot)
+            // Añadir action buttons
+            .setPositiveButton(botonPopup, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    if(round == 5 || acertaste){
+                        inicializarJuego();
                     }
-                });
+                }
+            });
         AlertDialog dialog = builder.create();
-
-
-        //TextView tm = dialog.findViewById(R.id.message_popup);
-        //tm.setText(mensaje);
-
-
-        //title_popup_txt.setText(titulo);
-        //message_popup_txt.setText(mensaje);
         dialog.show();
-
+        if(acertaste){
+            sonidoGanador();
+        }
     }
 
-    private void inicializarJuego() {
-        round = 0;
-        points = 0;
-        round_txt.setText(String.valueOf(round));
-        points_txt.setText(String.valueOf(points));
-        asignarNumeroAleatorio();
-    }
-
+    // Gestiona SeekBar
     private void prepararPunteria(){
-        //realizar el evento de escucha de cambio de barra de búsqueda utilizado para obtener el valor de progreso
+        // Realizar el evento de escucha de cambio de barra de búsqueda utilizado para obtener el valor de progreso
         simpleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
@@ -189,30 +178,57 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Generar número aleatorio
     private int getNumeroAleatorio(){
         int numero;
         numero = (int)(Math.random()*100+1);
         return numero;
     }
 
+    // Asignar número aleatorio
+    private void asignarNumeroAleatorio() {
+        number_random = getNumeroAleatorio();
+    }
+
+    // Ir a Activity About
+    public void ir_about(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_resources_start, R.anim.anim_resources_end);
+    }
+
+    // Mostrar el número oculto
+    public void mostrarValor(View view) {
+        Toast.makeText(MainActivity.this, "" + number_random,
+                Toast.LENGTH_SHORT).show();
+    }
+
     private void calculatePoints(){
         round++;
         int diferencia = Math.abs(progressChangedValue-number_random);
+
         if(diferencia == 0){
-            if(round == 1){
-                points = 1000000;
-            }else if(round == 2){
-                points += 500000;
-            }else if(round == 3){
-                points += 250000;
-            }else if(round == 4){
-                points += 100000;
-            }else if(round == 5) {
-                points += 50000;
+            acertaste = true;
+            switch (round){
+                case 1:
+                    points = 1000000;
+                    break;
+                case 2:
+                    points += 500000;
+                    break;
+                case 3:
+                    points += 250000;
+                    break;
+                case 4:
+                    points += 100000;
+                    break;
+                case 5:
+                    points += 50000;
+                    break;
             }
             titulo = "Acertaste en el intento : " + round;
             mensaje = "Tu puntuación total es : " + points;
-            inicializarJuego();
+            botonPopup = "Volver a Jugar";
         }else {
             int point = 0;
             if (diferencia > 50) {
@@ -241,20 +257,15 @@ public class MainActivity extends AppCompatActivity {
                 titulo = "Disparo super cercano";
             }
             mensaje = "Por este disparo te damos : " + point + " puntos";
+            if(round == 5){
+                titulo = "No acertaste, el número es : " + number_random;
+                mensaje = " Tu puntuación final es : " + points;
+                botonPopup = "Volver a Jugar";
+            }
         }
         points_txt.setText(String.valueOf(points));
         round_txt.setText(String.valueOf(round));
-        //title_popup_txt.setText(titulo);
-        //message_popup_txt.setText(mensaje);
     }
 
-    public void ir_about(View view) {
-        Intent intent = new Intent(this, AboutActivity.class);
-        startActivity(intent);
-    }
 
-    public void mostrarValor(View view) {
-        Toast.makeText(MainActivity.this, "" + number_random,
-                Toast.LENGTH_SHORT).show();
-    }
 }
